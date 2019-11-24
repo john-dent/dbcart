@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -13,16 +14,14 @@ class CreateCartLinesTable extends Migration
     public function up()
     {
         Schema::create('cart_lines', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('cart_id')->unsigned();
-            $table->integer('product_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('cart_id');
+            $table->unsignedBigInteger('product_id');
             $table->integer('quantity')->unsigned();
             $table->decimal('unit_price');
 
             $table->timestamps();
-            $table->foreign('cart_id')->references('id')
-                ->on('cart')
-                ->onDelete('cascade');
+            $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateCartLinesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('cart_lines');
+        Schema::dropIfExists('cart_lines');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -13,8 +14,8 @@ class CreateCartTable extends Migration
     public function up()
     {
         Schema::create('cart', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('session')->nullable();
             $table->string('name')->default('default');
             $table->string('status', 20)->default('active');
@@ -37,6 +38,6 @@ class CreateCartTable extends Migration
      */
     public function down()
     {
-        Schema::drop('cart');
+        Schema::dropIfExists('cart');
     }
 }
