@@ -6,14 +6,11 @@ use Hassansin\DBCart\Models\CartLine;
 class CartTest extends Orchestra\Testbench\TestCase
 {
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->loadMigrationsFrom([
-            '--database' => 'testbench',
-            '--path' => realpath(__DIR__.'/../src/Hassansin/DBCart/database/migrations'),
-        ]);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
     }
 
     protected function getPackageProviders($app)
