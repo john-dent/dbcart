@@ -7,20 +7,21 @@ use Illuminate\Support\ServiceProvider;
 class CartServiceProvider extends ServiceProvider {
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
-    /**
      * Perform post-registration booting of services.
      *
      * @return void
      */
     public function boot()
     {
-        //...
+        $this->publishes([
+            __DIR__.'/config/cart.php' => config_path('cart.php'),
+        ],'config');
+
+        $this->publishes([
+            __DIR__.'/database/migrations/' => database_path('migrations')
+        ], 'migrations');
+
+        $this->registerScheduler();
     }
 
     /**
@@ -30,8 +31,6 @@ class CartServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-
-        $this->registerScheduler();
         $this->app['cart_instances'] =  [] ;
 
         $this->app->bind('cart', function($app, $params){
@@ -46,14 +45,6 @@ class CartServiceProvider extends ServiceProvider {
             }
             return $app['cart_instances'][$instance_name];
         });
-
-        $this->publishes([
-            __DIR__.'/config/cart.php' => config_path('cart.php'),
-        ],'config');
-
-        $this->publishes([
-            __DIR__.'/database/migrations/' => database_path('migrations')
-        ], 'migrations');
 
         $this->mergeConfigFrom(
             __DIR__.'/config/cart.php', 'cart'
@@ -73,7 +64,6 @@ class CartServiceProvider extends ServiceProvider {
             $schedule->command('cart:cleanup')->$schedule_frequency();
         });
     }
-
 
     /**
      * Get the services provided by the provider.
