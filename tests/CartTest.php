@@ -10,7 +10,10 @@ class CartTest extends Orchestra\Testbench\TestCase
     {
         parent::setUp();
         $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+        $this->loadMigrationsFrom([
+            '--database' => 'testbench',
+            '--path' => realpath(__DIR__.'/../src/Hassansin/DBCart/database/migrations'),
+        ]);
     }
 
     protected function getPackageProviders($app)
